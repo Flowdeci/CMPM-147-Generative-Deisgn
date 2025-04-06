@@ -11,6 +11,7 @@ h1, h2 {
   padding: 10px;
   border: solid 1px #808;
   font-family: sans-serif;
+  background-color: aquamarine;
 }
 
 .minor-section {
