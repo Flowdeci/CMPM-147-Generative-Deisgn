@@ -96,7 +96,7 @@ function drawGrid(grid) {
                 placeTile(i, j, random(4) | 0, 0);
                 placeTile(i, j, 14, 0);
             } else if (gridCheck(grid, i, j, ".")) {
-                drawContext(grid, i, j, ".", 0, 0);
+                overworldDrawContext(grid, i, j, ".", 0, 0);
             }
         }
     }
@@ -181,7 +181,7 @@ function gridCode(grid, i, j, target) {
     return code;
 }
 
-function drawContext(grid, i, j, target, ti, tj) {
+function overworldDrawContext(grid, i, j, target, ti, tj) {
     //Get the code for this location and target.
     //Use the code as an array index to get a pair of tile offset numbers.
     //const [tiOffset, tjOffset] = lookup[code]; placeTile(i, j, ti + tiOffset, tj + tjOffset);

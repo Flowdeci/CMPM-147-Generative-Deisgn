@@ -16,6 +16,7 @@ let seed = 0;
 let tilesetImage;
 let currentGrid = [];
 let numRows, numCols;
+let overworld = false;
 
 function preload() {
   tilesetImage = loadImage(
@@ -32,8 +33,26 @@ function reseed() {
 }
 
 function regenerateGrid() {
-  select("#asciiBox").value(gridToString(generateGrid(numCols, numRows)));
-  reparseGrid();
+  if (overworld) {
+    select("#asciiBox").value(gridToString(generateGrid(numCols, numRows)));
+    reparseGrid();
+  } else {
+    select("#asciiBox").value(gridToString(dungeonGenerateGrid(numCols, numRows)));
+    reparseGrid();
+  }
+}
+
+function switchWorldType() {
+  overworld = !overworld;
+  if (overworld) {
+    select("#worldGenerationReport").html("Overworld");
+    currentGrid = generateGrid(numCols, numRows);
+  } else {
+    select("#worldGenerationReport").html("Dungeon");
+    currentGrid = dungeonGenerateGrid(numCols, numRows);
+  }
+
+  regenerateGrid();
 }
 
 function reparseGrid() {
@@ -84,6 +103,8 @@ function setup() {
 
   select("#reseedButton").mousePressed(reseed);
   select("#asciiBox").input(reparseGrid);
+  select("#worldGenerationButton").mousePressed(switchWorldType);
+  select("#worldGenerationReport").html("Overworld");
 
   reseed();
 
@@ -99,9 +120,12 @@ function setup() {
 
 function draw() {
   randomSeed(seed);
-  drawGrid(currentGrid);
-
-
+  if (overworld) {
+    drawGrid(currentGrid);
+  } else {
+    
+    drawDungeonGrid(currentGrid);
+  }
 }
 
 function placeTile(i, j, ti, tj) {
