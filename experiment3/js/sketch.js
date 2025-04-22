@@ -16,7 +16,7 @@ let seed = 0;
 let tilesetImage;
 let currentGrid = [];
 let numRows, numCols;
-let overworld = false;
+let overworld = true;
 
 function preload() {
   tilesetImage = loadImage(
@@ -115,6 +115,14 @@ function setup() {
   });
   resizeScreen();
 
+
+  if (overworld) {
+    select("#worldGenerationReport").html("Overworld");
+    currentGrid = generateGrid(numCols, numRows);
+  } else {
+    select("#worldGenerationReport").html("Dungeon");
+    currentGrid = dungeonGenerateGrid(numCols, numRows);
+  }
 }
 
 

@@ -6,12 +6,18 @@ function generateDungeonRoom(grid, numRows, numCols) {
     let roomHeight = random(4, 8) | 0;
     let roomX = random(0, numCols - roomWidth) | 0;
     let roomY = random(0, numRows - roomHeight) | 0;
+    let hasChest = random(0, 1) | 0;
 
     for (let i = roomY; i < roomY + roomHeight; i++) {
         for (let j = roomX; j < roomX + roomWidth; j++) {
             grid[i][j] = ".";
+            if (hasChest = true && random(0, 1) | 0) {
+                placeTile(i, j, 2, 30);
+                hasChest = false;
+            }
         }
     }
+
 }
 
 function generateHallway(grid, numRows, numCols) {
@@ -170,9 +176,17 @@ function dungeonDrawContext(grid, i, j, target, ti, tj) {
         let t = dungeonLookup[binary][x];
         //place random floor tile
         placeTile(i, j, random(11, 14), random([21, 23, 24]));
-
+        //place random chest
+        if (random(0, 1) > 0.98 && binary == 15) {
+            placeTile(i, j, random([0, 1, 2]), 30);
+        }
+        
         //Place autolitlling border tiles
         placeTile(i, j, t[0], t[1]);
+        //place random door 
+        if (random(0, 1) > 0.9 && binary == 14) {
+            placeTile(i, j, random([25, 26]), random([25, 26]));
+        }
     }
 
 
