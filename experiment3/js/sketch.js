@@ -16,7 +16,7 @@ let seed = 0;
 let tilesetImage;
 let currentGrid = [];
 let numRows, numCols;
-let overworld = true;
+let overworld = false;
 
 function preload() {
   tilesetImage = loadImage(
@@ -125,13 +125,16 @@ function setup() {
   }
 }
 
-
+let drawnDungeon = false;
 function draw() {
   randomSeed(seed);
+
   if (overworld) {
     drawGrid(currentGrid);
-  } else {
-    
+    drawnDungeon = false;
+  } 
+  if(!drawnDungeon && !overworld) {
+    drawnDungeon = true;
     drawDungeonGrid(currentGrid);
   }
 }

@@ -1,6 +1,6 @@
 /* exported generateGrid, drawGrid */
 /* global placeTile */
-
+let smoked=false
 function generateDungeonRoom(grid, numRows, numCols) {
     let roomWidth = random(4, 8) | 0;
     let roomHeight = random(4, 8) | 0;
@@ -109,7 +109,7 @@ function dungeonGenerateGrid(numCols, numRows) {
 }
 
 function drawDungeonGrid(grid) {
-
+    
     for (let i = 0; i < grid.length; i++) {
         for (let j = 0; j < grid[i].length; j++) {
             // Check if the current cell is a river or forest tile
@@ -119,6 +119,32 @@ function drawDungeonGrid(grid) {
             } else if (gridCheck(grid, i, j, ".")) {
                 dungeonDrawContext(grid, i, j, ".", 0, 0);
             }
+        }
+    }
+    smoke();
+
+}
+
+function smoke() {
+    let noiseLevel = 255;
+    let noiseScale = 0.009;
+
+    // Iterate from top to bottom.
+    for (let y = 0; y < numCols*16; y += 1) {
+        // Iterate from left to right.
+        for (let x = 0; x < numRows*16 ; x += 1) {
+            // Scale the input coordinates.
+            let nx = noiseScale * x;
+            let ny = noiseScale * y;
+            let nt = noiseScale * frameCount;
+
+            // Compute the noise value.
+            let c = noiseLevel * noise(nx, ny, nt);
+
+            // Draw the point.
+            
+            stroke(c,200)
+            point(x, y);
         }
     }
 }
@@ -180,7 +206,7 @@ function dungeonDrawContext(grid, i, j, target, ti, tj) {
         if (random(0, 1) > 0.98 && binary == 15) {
             placeTile(i, j, random([0, 1, 2]), 30);
         }
-        
+
         //Place autolitlling border tiles
         placeTile(i, j, t[0], t[1]);
         //place random door 
