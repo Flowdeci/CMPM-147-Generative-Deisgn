@@ -14,9 +14,9 @@
     p3_drawAfter
 */
 
-function p3_preload() {}
+function p3_preload() { }
 
-function p3_setup() {}
+function p3_setup() { }
 
 let worldSeed;
 let clicks = {}; // Track the number of clicks per tile
@@ -199,9 +199,51 @@ function p3_drawTile(i, j) {
       drawFlower(growth);
     }
   }
+  // Fish
+  let key = `${i},${j}`;
+  if (!fish[key] && shouldHaveFish(i, j, noiseValue)) {
+    fish[key] = { x: random(-tw / 2, tw / 2), y: random(-th / 2, th / 2) };
+  }
+  if (fish[key]) {
+    drawFish(fish[key].x, fish[key].y);
+    // Change position of fish
+    fish[key].x += random(-1.1, 1.1);
+    fish[key].y += random(-1.1, 1.1);
+    // Keep fish within tile bounds
+    fish[key].x = constrain(fish[key].x, -tw / 2, tw / 2);
+    fish[key].y = constrain(fish[key].y, -th / 2, th / 2);
+  }
+
+  if (shouldHaveCactus(i, j, noiseValue)) {
+    drawCactus(0, -th / 4, 10, i, j);
+  }
 
   // Remove finished growths
   flowerGrowths = flowerGrowths.filter((growth) => growth.progress < 1);
+}
+function shouldHaveCactus(i, j, noiseValue) {
+  if (noiseValue >= 0.4 && noiseValue < 0.55) {
+    return XXH.h32("cactus:" + [i, j], worldSeed) % 6 === 0;
+  }
+  return false;
+}
+
+function drawCactus(x, y, size, i, j) {
+  let trunkHeight = size * 0.8;
+  let armOffset = size * 0.4;
+
+  stroke(34, 139, 34);
+  strokeWeight(3);
+  line(x, y, x, y - trunkHeight);
+
+  // Draw left arm
+  if (XXH.h32("fish:" + [i, j], worldSeed) % 3 === 0) {
+    line(x, y - armOffset, x - size * 0.3, y - armOffset - size * 0.2);
+  }
+  // Draw right arm
+  if (XXH.h32("fish:" + [i, j], worldSeed) % 5 === 0) {
+    line(x, y - armOffset, x + size * 0.3, y - armOffset - size * 0.2);
+  }
 }
 
 function p3_tileClicked(i, j) {
@@ -243,4 +285,4 @@ function p3_drawSelectedTile(i, j) {
   text(`Tile ${i},${j}\nClicks: ${clickCount}`, 0, 0);
 }
 
-function p3_drawAfter() {}
+function p3_drawAfter() { }
